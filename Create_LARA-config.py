@@ -14,9 +14,9 @@ import collections
 #* Example ["TRA","TSA"] -> must be a list
 #* Set [None] if you dont want a category filter -> must be list of None
 
-fileDef = "C:/Users/matis/OneDrive/Documenten/Euroscope/Plugins/Topsky/TopSkyAreas.txt",  [None] 
-#fileDef = "C:/Users/matis/Downloads/Trash/TopSkyAreas_PT.txt", [None]
-#fileDef = "C:\\Users\\matis\\OneDrive\\Documenten\\Euroscope\\EDGG-Full-Package_20220226132637-220201-0005\\EDGG\\Plugins\\Topsky_Default\\TopSkyAreas.txt", [None]
+fileDef = "C:/Users/xxxxxxxxxxxxxxxx/Documenten/Euroscope/Plugins/Topsky/TopSkyAreas.txt",  [None] 
+#fileDef = "C:/Users/xxxxxx/TopSkyAreas_PT.txt", [None]
+#fileDef = "C:\\Users\xxxx\\Euroscope\\EDGG-Full-Package_20220226132637-220201-0005\\EDGG\\Plugins\\Topsky_Default\\TopSkyAreas.txt", [None]
 
  
 vacc = "BELUX"
