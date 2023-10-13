@@ -6,17 +6,15 @@ from dms2dec.dms_convert import dms2dec
 from extra_functions.basic_functions import cleanup
 import collections
 
-#TODO: support circles
-
 #filepath, area categories*
 #* Category as defined in the category line like: CATEGORY:REST
 #* Category as defined on the area line like: AREA:4:EBBL_CTA, where 4 is the category.
 #* Example ["TRA","TSA"] -> must be a list
 #* Set [None] if you dont want a category filter -> must be list of None
 
-fileDef = "C:/Users/xxxxxxxxxxxxxxxx/Documenten/Euroscope/Plugins/Topsky/TopSkyAreas.txt",  [None] 
-#fileDef = "C:/Users/xxxxxx/TopSkyAreas_PT.txt", [None]
-#fileDef = "C:\\Users\xxxx\\Euroscope\\EDGG-Full-Package_20220226132637-220201-0005\\EDGG\\Plugins\\Topsky_Default\\TopSkyAreas.txt", [None]
+fileDef = "C:/Users/x/Documenten/Euroscope/Plugins/Topsky/TopSkyAreas.txt",  [None] 
+#fileDef = "C:/Users/x/TopSkyAreas_PT.txt", [None]
+#fileDef = "C:\\x\\Documenten\\Euroscope\\EDGG-Full-Package_20220226132637-220201-0005\\EDGG\\Plugins\\Topsky_Default\\TopSkyAreas.txt", [None]
 
  
 vacc = "BELUX"
@@ -30,7 +28,7 @@ def filterTextBlockForAreas(area_txtblocks, categories):
         possible_area = IdentifyTS_AreaBlock_AndToStandardFormat(block, categories)
         
         if (
-            (Has_Categories and all(k in possible_area for k in ("coordinates","category","active")))
+            (Has_Categories and all(k in possible_area for k in ("coordinates","category")))
             or (not Has_Categories and all(k in possible_area for k in ("coordinates","active")))
         ):
             all_areas.append(possible_area)       
@@ -60,7 +58,18 @@ def Convert_TScoordinates_toVGformat(topskycoordinates):
         
         vatgl_coordinates.append(coors)
 
-    return vatgl_coordinates 
+    return vatgl_coordinates
+
+def Convert_TScoordiantes_ToCircle(topskycoordinates):
+    circle_split = topskycoordinates.split(":")
+    coorLine = " ".join(circle_split[1:3])
+    coors = Convert_TScoordinates_toVGformat(coorLine)[0]
+    circle_VG = {
+        "centre" : coors,
+        "radius" : circle_split[3]
+    }
+    #area["label"] = "" #will be popped line 155
+    return circle_VG
 
 #Creates dictionary of areas
 def IdentifyTS_AreaBlock_AndToStandardFormat(block, categories):
@@ -102,7 +111,17 @@ def IdentifyTS_AreaBlock_AndToStandardFormat(block, categories):
 
         if line.startswith("CIRCLE"):
             data["coordinates"] = line
-            
+
+            # circle_split = data["coordinates"].split(":")
+            # coorLine = " ".join(circle_split[1:3])
+            # coors = Convert_TScoordinates_toVGformat(coorLine)[0]
+            # circle_VG = {
+            #     "centre" : coors,
+            #     "radius" : circle_split[3]
+            # }
+
+            # data["coordinates"] = circle_VG
+                        
         if re.match(r"^(N|S)0?([0-9]{2}).([0-9]{2}).([0-9]{1,2})(.[0-9]{3,})?(:|\s)(E|W)([0-9]{3}).([0-9]{2}).([0-9]{1,2})(.[0-9]{3,})?",line):
             
             line = line.replace(":"," ") #Coordinates can be separated by : or \s but let's standardise with \s
@@ -127,7 +146,7 @@ def TSAreaActivationToStandardFormat(rules):
         if rule == "1":
             schedules.append("0101:1231::0000:2359:") #always active
         elif rule.startswith("NOTAM"):
-            r = rule.replace("NOTAM:","")
+            r = rule.replace("NOTAM:","")[5:] #Hide fir and :
             notams.append(r)
         elif rule.startswith("AUP"):
             r = rule.replace("AUP:","")
@@ -167,15 +186,25 @@ def CreateLARAConfiguration(all_areas, vacc, vaccHTTP):
     Lara_config = {}
     areas = []
     for area in all_areas:
-        area["coordinates_TS"] = area["coordinates"]
-        area["coordinates_VG"] = Convert_TScoordinates_toVGformat(area["coordinates"])
+        if area["coordinates"].startswith("CIRCLE"):
+            area["coordinates_VG"] = Convert_TScoordiantes_ToCircle(area["coordinates"])
+        else:
+            area["coordinates_VG"] = Convert_TScoordinates_toVGformat(area["coordinates"])
 
-        area["activation"] = TSAreaActivationToStandardFormat(area["active"])
+
+        area["coordinates_TS"] = area["coordinates"]
+
+        if "active" in area:
+            area["activation"] = TSAreaActivationToStandardFormat(area["active"])
+            area.pop("active") 
+        else:
+            area["activation"] = {}
+        
         area["label_TS"], area = FindLabel(area)
 
   
         #All these have been repurposed elsewhere with a different key
-        area.pop("active") 
+
         area.pop("coordinates")
         area.pop("label")
 
@@ -205,16 +234,22 @@ def Find_anomalies(lara_config, vacc):
     for area in areas: 
         names.append(area["name"])
 
-        schedules = area["activation"]["Schedules"]
-        for s in schedules:
-            if not re.search(r"(\d{4,6}:\d{4,6}:\d{0,8}:\d{0,4}:\d{0,4}(?::[0-9]{1,6}:[0-9]{1,6})?(?::[\S]+)?)", s):
-                anomaly_schedule.append(s)
-        
-        if len(area["coordinates_VG"]) < 3:
-            anomaly_coordinates.append(area["name"])
-        
-        if len(area["activation"]["NOTAM"]) == 0 and len(area["activation"]["EAUP"]) == 0 and len(area["activation"]["ControllerID"]) == 0 and len(area["activation"]["Schedules"]) == 0:
+        if len(area["activation"]) > 0: #If activation is defined
+            schedules = area["activation"]["Schedules"]
+            for s in schedules:
+                if not re.search(r"(\d{4,6}:\d{4,6}:\d{0,8}:\d{0,4}:\d{0,4}(?::[0-9]{1,6}:[0-9]{1,6})?(?::[\S]+)?)", s):
+                    anomaly_schedule.append(s)
+
+        else:
             anomaly_activation.append(area["name"])
+
+            # if len(area["activation"]["NOTAM"]) == 0 and len(area["activation"]["EAUP"]) == 0 and len(area["activation"]["ControllerID"]) == 0 and len(area["activation"]["Schedules"]) == 0:
+            #     anomaly_activation.append(area["name"])
+        
+        if len(area["coordinates_VG"]) < 3 and type(area["coordinates_VG"]) == list:
+            anomaly_coordinates.append(area["name"])
+
+
 
     non_unique_names = [item for item, count in collections.Counter(names).items() if count > 1]
 
@@ -223,7 +258,7 @@ def Find_anomalies(lara_config, vacc):
         "Bad_Schedules" : anomaly_schedule,             #Likely areas activated by runways etc. Please activate these using vaccHTTP and remove their schedule in the json.
         "Duplicates_AreaNames" : non_unique_names,      #This area is defined multiple times.
         "<3_coordinates" : anomaly_coordinates,         #This area does not have coordinates defined. At this time, it might also be a circle.
-        "no_activation" : anomaly_activation            #This area is not activated automatically. Please activate using vaccHTTP.
+        "no_activation" : anomaly_activation            #This area is not activated automatically. Please activate using vaccHTTP. Or if unused, remove
     }
     return anomalies
         
@@ -240,8 +275,8 @@ with open(file, "r") as file:
 anomalies = Find_anomalies(lara_config, vacc)
 
 
-with open(f"./{vacc}.json", "w") as file:
+with open(f"./output/{vacc}.json", "w") as file:
     file.write(json.dumps(lara_config, indent=4))
 
-with open("./anomalies.json", "w") as file:
+with open("./output/anomalies.json", "w") as file:
     file.write(json.dumps(anomalies, indent=4))
