@@ -31,7 +31,16 @@ def ConvertCoordinates(area):
     if type(area["coordinates_TS"]) == dict:
         centre = OneTScoorToGEOjson(area["coordinates_TS"]["centre"])
         radius = area["coordinates_TS"]["radius"]*1852                #In metres
-        area["coordinates_GEO"] = p.circle_to_polygon(center = centre, radius = radius)["coordinates"]
+
+        coors = []
+        for coordinate in p.circle_to_polygon(center = centre, radius = radius)["coordinates"][0]:
+            print(coordinate)
+            lat, lon = coordinate
+            lat = round(lat,5)
+            lon = round(lon, 5)
+            coors.append([lat,lon])
+
+        area["coordinates_GEO"] = [coors]
 
     
     #Area is a polygon
