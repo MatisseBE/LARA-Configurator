@@ -34,7 +34,6 @@ def ConvertCoordinates(area):
 
         coors = []
         for coordinate in p.circle_to_polygon(center = centre, radius = radius)["coordinates"][0]:
-            print(coordinate)
             lat, lon = coordinate
             lat = round(lat,5)
             lon = round(lon, 5)
