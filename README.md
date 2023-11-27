@@ -34,5 +34,6 @@ The accepted format is TopSky schedules.
 For each area you can optionally add the following keys:
 - "entry_conditions" - These are the entry conditions for said area. E.g.: Radio Mandatory Zone - Area reserved to participating a/c - Prohibited to all a/c - ...
 - "remark" - Any information you wish to share. E.g.: EBCI SOPOK3K, MEDIL3Y unavailable - Sanicole Airshow - ...
+
 Keep in mind, that these will show every time your area activates! (Unless overwritten by vaccHTTP.)
 
