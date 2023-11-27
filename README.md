@@ -3,7 +3,7 @@ Creates vLARA configuration for use on VATSIM.
 
 # Walkthrough
 ## Set variables
-fileDef - Path to the TopskyAreas.txt file + list of area categories
+fileDef - Path to the TopskyAreas.txt file + list of area categories. !Make sure the TopskyAreas.txt file only contains your vACC's areas when running the file! Invite your neighbors to the project if they haven't already.😎
 
 vacc - Name of vacc
 
