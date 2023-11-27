@@ -1,3 +1,44 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 from inspect import indentsize
 from textwrap import indent
 import json
@@ -5,11 +46,6 @@ import regex as re
 from dms2dec.dms_convert import dms2dec
 from extra_functions.basic_functions import cleanup
 import collections
-import sys
-import warnings
-import configparser
-
-warnings.filterwarnings('ignore', category= SyntaxWarning)
 
 #filepath, area categories*
 #* Category as defined in the category line like: CATEGORY:REST
@@ -76,25 +112,6 @@ def Convert_TScoordiantes_ToCircle(topskycoordinates):
     #area["label"] = "" #will be popped line 155
     return circle_VG
 
-def Rewrite_TScoordinates(topskycoordinates):
-    if topskycoordinates.startswith("CIRCLE:"):
-        circle_split = topskycoordinates.split(":")
-        coors = circle_split[1:3]
-        circle_coors = {
-            "centre" : coors,
-            "radius" : float(circle_split[3])
-        }
-        return circle_coors
-    
-    joined_coors = topskycoordinates.split("\n")
-    split_coors = []
-    for coor in joined_coors:
-        tmp = coor.split(" ")
-        split_coors.append(tmp)
-
-    return split_coors
-
-
 #Creates dictionary of areas
 def IdentifyTS_AreaBlock_AndToStandardFormat(block, categories):
     data = {}
@@ -110,10 +127,9 @@ def IdentifyTS_AreaBlock_AndToStandardFormat(block, categories):
                 data["category"] =  line.split(":")[1]
 
         if line.startswith("LABEL"):
-            data["label"] = line.split(":")[1:3]
-            # lat =line.split(":")[1]
-            # lon = line.split(":")[2]
-            # data["label"] = f"{lat} {lon}"
+            lat =line.split(":")[1]
+            lon = line.split(":")[2]
+            data["label"] = f"{lat} {lon}"
 
 
         if line.startswith("AREA"):
@@ -122,8 +138,8 @@ def IdentifyTS_AreaBlock_AndToStandardFormat(block, categories):
 
         if line.startswith("LIMITS"):
             values = line.split(":")
-            data["lower"] = int(values[1])
-            data["upper"] = int(values[2])
+            data["lower"] = values[1]
+            data["upper"] = values[2]
 
         if line.startswith("ACTIVE"):
             activations = line.replace("ACTIVE:", "")
@@ -193,28 +209,31 @@ def TSAreaActivationToStandardFormat(rules):
 
 #Finds or creates a TS-label
 def FindLabel(area):
-    #Poly areas with a label
     if "label" in area:
         return area["label"], area
     
-    #Circles (centre)
-    elif area["coordinates"].startswith("CIRCLE:"):
+    elif area["coordinates_TS"].startswith("CIRCLE"):
+        coor = area["coordinates_TS"].split(":")
         area["label"] = "" #will be popped line 155
-        return area["coordinates_TS"]["centre"], area
+        return f"{coor[1]} {coor[2]}", area
 
-    #Poly areas without a label
     else:
-        print("No label-position found for area:", area["name"], " --- First coordiante will be label position.")
+        coor =area["coordinates_TS"].split("\n")[0].split(" ")
         area["label"] = "" #will be popped line 155
-        return area["coordinates_TS"][0], area
-    
+        return f"{coor[0]} {coor[1]}", area
 
 #LARA-config workflow  
 def CreateLARAConfiguration(all_areas, vacc, vaccHTTP):
     Lara_config = {}
     areas = []
     for area in all_areas:
-        area["coordinates_TS"] = Rewrite_TScoordinates(area["coordinates"])
+        if area["coordinates"].startswith("CIRCLE"):
+            area["coordinates_VG"] = Convert_TScoordiantes_ToCircle(area["coordinates"])
+        else:
+            area["coordinates_VG"] = Convert_TScoordinates_toVGformat(area["coordinates"])
+
+
+        area["coordinates_TS"] = area["coordinates"]
 
         if "active" in area:
             area["activation"] = TSAreaActivationToStandardFormat(area["active"])
@@ -226,6 +245,7 @@ def CreateLARAConfiguration(all_areas, vacc, vaccHTTP):
 
   
         #All these have been repurposed elsewhere with a different key
+
         area.pop("coordinates")
         area.pop("label")
 
@@ -267,8 +287,8 @@ def Find_anomalies(lara_config, vacc):
             # if len(area["activation"]["NOTAM"]) == 0 and len(area["activation"]["EAUP"]) == 0 and len(area["activation"]["ControllerID"]) == 0 and len(area["activation"]["Schedules"]) == 0:
             #     anomaly_activation.append(area["name"])
         
-        # if len(area["coordinates_VG"]) < 3 and type(area["coordinates_VG"]) == list:
-        #     anomaly_coordinates.append(area["name"])
+        if len(area["coordinates_VG"]) < 3 and type(area["coordinates_VG"]) == list:
+            anomaly_coordinates.append(area["name"])
 
 
 

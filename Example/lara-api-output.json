@@ -1,0 +1,50 @@
+{
+  "notice_info": {
+    "type": "LARA",
+    "valid_wef": "2023-11-26T06:00:00",
+    "valid_til": "2023-11-28T06:00:00",
+    "released_on": "2023-11-25T15:28:00",
+    "query_locations": "BELUX;NETHERLANDS;LANGEN",
+    "query_"
+  },
+  "areas": [
+    [
+      {
+        "name": "EBBE_DEMO",
+        "category": "TRA",
+        "minimum_fl": 315,
+        "maximum_fl": 660,
+        "start_datetime": "2023-11-26T06:00:00+00:00",
+        "end_datetime": "2023-11-27T06:00:00+00:00",
+        "coordinates_TS": {
+          "centre": ["N50.45.28", "E004.46.01"],
+          "radius": 3.0
+        },
+        "label_TS": ["N50.45.28", "E004.46.01"],
+        "activation_trigger" : ["external","NOTAM"]
+      },
+      {
+        "name": "EBR04",
+        "category": "REST",
+        "minimum_fl": 0,
+        "maximum_fl": 250,
+        "start_datetime": "2023-11-26T06:00:00+00:00",
+        "end_datetime": "2023-11-27T06:00:00+00:00",
+        "coordinates_TS": [
+          ["N50.31.17", "E006.12.00"],
+          ["N50.31.26", "E006.12.07"],
+          ["N50.29.55", "E006.13.54"],
+          ["N50.30.00", "E006.18.54"],
+          ["N50.29.06", "E006.21.02"],
+          ["N50.25.57", "E006.22.34"],
+          ["N50.25.57", "E006.09.56"],
+          ["N50.26.57", "E006.08.41"]
+        ],
+        "label_TS": ["N50.27.51", "E006.14.59"],
+        "entry_conditions": "Prohibited to all a/c",
+        "remark": "EBCI SOPOK3K MEDIL3Y unavailable",
+        "activation_trigger" : ["NOTAM"]
+      }
+    ]
+  ]
+}

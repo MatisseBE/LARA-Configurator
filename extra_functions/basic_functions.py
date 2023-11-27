@@ -19,7 +19,7 @@ def cleanup(file):
         areas.append(f"AREA:{area}\n")
    
     #Debug output
-    with open("./blocks.json", "w") as f:
+    with open("./output/blocks.json", "w") as f:
         f.write(json.dumps(areas[1:], indent=4))
     
     #Everything before the first words AREA: is not an area and can be safely ignored. 
