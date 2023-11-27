@@ -15,11 +15,9 @@ Has_Categories - Bool - True: categories of fileDef are taken into account - Fal
 ## Let's run
 Been a while, ay? 
 
-Run Create_LARA-config
-
-Run Helpful tools/lara-configTStoGEOjson
-
-Run Helpful tools/lara-configtoVG
+- Run Create_LARA-config
+- Run Helpful tools/lara-configTStoGEOjson
+- Run Helpful tools/lara-configtoVG
 
 ## vaccHTTP
 This is a variable that links to the vACC's API. 
