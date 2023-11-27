@@ -4,14 +4,21 @@ Creates vLARA configuration for use on VATSIM.
 # Walkthrough
 ## Set variables
 fileDef - Path to the TopskyAreas.txt file + list of area categories
+
 vacc - Name of vacc
+
 vaccHTTP - Link to the vACC's API for customised and manual activaitons
+
 Has_Categories - Bool - True: categories of fileDef are taken into account - False: Areas without categories are skipped
+
 
 ## Let's run
 Been a while, ay? 
+
 Run Create_LARA-config
+
 Run Helpful tools/lara-configTStoGEOjson
+
 Run Helpful tools/lara-configtoVG
 
 ## vaccHTTP
