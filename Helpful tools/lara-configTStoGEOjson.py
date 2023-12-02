@@ -58,6 +58,7 @@ def ConvertCoordinates(area):
 
 def ConvertLabel(area):
     area["label_GEO"] = OneTScoorToGEOjson(area["label_TS"])
+    area["label_x"], area["label_y"] = OneTScoorToGEOjson(area["label_TS"])
     area.pop("label_TS")
     return area
 

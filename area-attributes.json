@@ -1,0 +1,15 @@
+{
+    "EBBE_DEMO" : {
+        "entry_condition" : "Area reserved to participating a/c",
+        "remark" : "Sanicole Airshow"
+       },
+       "PJE_HECHTELSE HEIDE" : {
+        "remark" : "Parachuting area"
+       },
+       "EBR04" : {
+        "remark" : "EBCI SOPOK3K, MEDIL3Y unavailable"
+       },
+       "EBR07B" : {
+        "entry_condition" : "Radio Mandatory Zone"
+       }
+}

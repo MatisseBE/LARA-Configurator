@@ -1,15 +1,11 @@
 {
-    "Bad_Schedules": [
-        "RWY:ARR:EBBR25L,EBBR25R:DEP:*"
-    ],
+    "Bad_Schedules": [],
     "Duplicates_AreaNames": [],
-    "<3_coordinates": [],
+    "<3_coordinates": [
+        "EBTRAN1"
+    ],
     "no_activation": [
         "EBBE_DEMO",
-        "EBGB_ATZ",
-        "KOK_Gate",
-        "KOK_Buff",
-        "KOK_BuffH",
         "EBBL_CTR",
         "EBFS_CTR",
         "EBBE_CTR",

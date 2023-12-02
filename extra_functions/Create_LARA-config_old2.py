@@ -1,3 +1,48 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 from inspect import indentsize
 from textwrap import indent
 import json
@@ -9,50 +54,32 @@ import warnings
 
 warnings.filterwarnings('ignore', category= SyntaxWarning)
 
-with open(f"area-attributes.json", "r") as file:
-    attributes_dict = json.load(file)
+#filepath, area categories*
+#* Category as defined in the category line like: CATEGORY:REST
+#* Category as defined on the area line like: AREA:4:EBBL_CTA, where 4 is the category.
+#* Example ["TRA","TSA"] -> must be a list
+#* Set [None] if you dont want a category filter -> must be list of None
 
-fileDef = "C:/Users/matis/OneDrive/Documenten/Euroscope/Plugins/Topsky/TopSkyAreas.txt"
-#fileDef = "C:/Users/matis/Downloads/Trash/TopSkyAreas_PT.txt"
-#fileDef = "C:\\Users\\matis\\OneDrive\\Documenten\\Euroscope\\EDGG-Full-Package_20220226132637-220201-0005\\EDGG\\Plugins\\Topsky_Default\\TopSkyAreas.txt"
+fileDef = "C:/Users/matis/OneDrive/Documenten/Euroscope/Plugins/Topsky/TopSkyAreas.txt",  [None] 
+#fileDef = "C:/Users/matis/Downloads/Trash/TopSkyAreas_PT.txt", [None]
+#fileDef = "C:\\Users\\matis\\OneDrive\\Documenten\\Euroscope\\EDGG-Full-Package_20220226132637-220201-0005\\EDGG\\Plugins\\Topsky_Default\\TopSkyAreas.txt", [None]
 
+ 
 vacc = "BELUX"
 vaccHTTP = "www.beluxvacc/extra_areas"
-
-area_filter = {
-    "RemoveByName" : ["EBGB_ATZ", "KOK_Gate"],
-    "RemoveByCategory" : ["HOLD", "ATZ", "NTZ", "S", "BUFFERH", "BUFFER", "HOGATE"]
-}
-
-def Reason_discard(area):
-    msg = ""
-    if not "coordinates" in area:
-        msg = f"{area["name"]} has no coordinates"
-    elif area["name"] in area_filter["RemoveByName"]:
-        msg = f"{area["name"]} is in area_filter (name)"
-    elif area["category"] in area_filter["RemoveByCategory"]:
-        msg = f"{area["name"]} is in area_filter (category: '{area["category"]}')"
-    else:
-        msg = f"Issue with {area["name"]} could not be determined\n{area}"
-    
-    return f"WARN: {msg} -> area discarted"
+Has_Categories = True #Does your TS file have CATEGORYDEFs? - If True, all areas without a category will be discarted.
 
 #Filters and converts list of possible areas into a definitive dictionary of actual areas. 
-def filterTextBlockForAreas(area_txtblocks, area_filter):
+def filterTextBlockForAreas(area_txtblocks, categories):
     all_areas = []
     for block in area_txtblocks:
-        possible_area = IdentifyTS_AreaBlock_AndToStandardFormat(block)
+        possible_area = IdentifyTS_AreaBlock_AndToStandardFormat(block, categories)
         
         if (
-            "coordinates" in possible_area
-            and possible_area["name"] not in area_filter["RemoveByName"]
-            and possible_area["category"] not in area_filter["RemoveByCategory"]
-            
+            (Has_Categories and all(k in possible_area for k in ("coordinates","category")))
+            or (not Has_Categories and all(k in possible_area for k in ("coordinates","active")))
         ):
-            
-            all_areas.append(possible_area)
-        else:
-            print(Reason_discard(possible_area))      
+            all_areas.append(possible_area)       
 
     return all_areas
 
@@ -112,16 +139,18 @@ def Rewrite_TScoordinates(topskycoordinates):
 
 
 #Creates dictionary of areas
-def IdentifyTS_AreaBlock_AndToStandardFormat(block):
+def IdentifyTS_AreaBlock_AndToStandardFormat(block, categories):
     data = {}
     
     for line in block.split("\n"):
         if line.startswith("CATEGORY"):
-            data["category"] =  line.split(":")[1]
+            if line.split(":")[1] in categories or None in categories:
+                data["category"] =  line.split(":")[1]
               
 
         elif line.startswith("AREA"):
-            data["category"] =  line.split(":")[1]
+            if line.split(":")[1] in categories:
+                data["category"] =  line.split(":")[1]
 
         if line.startswith("LABEL"):
             data["label"] = line.split(":")[1:3]
@@ -218,18 +247,13 @@ def FindLabel(area):
 
     #Poly areas without a label
     else:
-        print("WARN: No label-position found for area:", area["name"], " -> First coordiante will be label position.")
+        print("No label-position found for area:", area["name"], " --- First coordiante will be label position.")
         area["label"] = "" #will be popped line 155
         return area["coordinates_TS"][0], area
-
-def addAttributes(area,attributes_dict):
-    if area["name"] in attributes_dict:
-        for item in attributes_dict[area["name"]]:
-            area[item] = attributes_dict[area["name"]][item]
-    return area
+    
 
 #LARA-config workflow  
-def CreateLARAConfiguration(all_areas, vacc, vaccHTTP,attributes_dict):
+def CreateLARAConfiguration(all_areas, vacc, vaccHTTP):
     Lara_config = {}
     areas = []
     for area in all_areas:
@@ -248,7 +272,6 @@ def CreateLARAConfiguration(all_areas, vacc, vaccHTTP,attributes_dict):
         area.pop("coordinates")
         area.pop("label")
 
-        area = addAttributes(area,attributes_dict) #Allows you to save entry conditions and remarks.
         areas.append(area)
 
     vacc_config = {
@@ -287,8 +310,8 @@ def Find_anomalies(lara_config, vacc):
             # if len(area["activation"]["NOTAM"]) == 0 and len(area["activation"]["EAUP"]) == 0 and len(area["activation"]["ControllerID"]) == 0 and len(area["activation"]["Schedules"]) == 0:
             #     anomaly_activation.append(area["name"])
         
-        if len(area["coordinates_TS"]) < 3 and type(area["coordinates_TS"]) == list:
-            anomaly_coordinates.append(area["name"])
+        # if len(area["coordinates_VG"]) < 3 and type(area["coordinates_VG"]) == list:
+        #     anomaly_coordinates.append(area["name"])
 
 
 
@@ -301,17 +324,16 @@ def Find_anomalies(lara_config, vacc):
         "<3_coordinates" : anomaly_coordinates,         #This area does not have coordinates defined. At this time, it might also be a circle.
         "no_activation" : anomaly_activation            #This area is not activated automatically. Please activate using vaccHTTP. Or if unused, remove
     }
-
-    print("Anomalies file create. Please check it Output/anomalies.json and the documentation!")
     return anomalies
         
 
 #Initializer code
-with open(fileDef, "r") as file:
+file, categories = fileDef
+with open(file, "r") as file:
     area_txtblocks = cleanup(file)
     
-    all_areas = filterTextBlockForAreas(area_txtblocks, area_filter)
-    lara_config = CreateLARAConfiguration(all_areas, vacc, vaccHTTP,attributes_dict)
+    all_areas = filterTextBlockForAreas(area_txtblocks, categories)
+    lara_config = CreateLARAConfiguration(all_areas, vacc, vaccHTTP)
     #print(lara_config)
 
 anomalies = Find_anomalies(lara_config, vacc)
