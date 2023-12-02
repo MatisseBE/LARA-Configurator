@@ -1,4 +1,4 @@
-c# LARA-Configurator
+# LARA-Configurator
 Creates vLARA configuration file for use on VATSIM.
 
 # Walkthrough
