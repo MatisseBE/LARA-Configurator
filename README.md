@@ -18,7 +18,7 @@ Been a while, ay?
 
 - Run Create_LARA-config
 - Run Helpful tools/lara-configTStoGEOjson
-(- Run Helpful tools/lara-configtoVG)
+- (Run Helpful tools/lara-configtoVG)
 
 ## vaccHTTP
 This is a variable that links to the vACC's API. 
