@@ -41,9 +41,14 @@ Keep in mind, that these will show every time your area activates! (Unless overw
 
 ## Anomalies.json
 Schedule: A found schedule is not conform the TopskSky format. (This is likely an activation method that is not supported by LARA. Use the vaccHTTP function to activate this area.)
+
 Duplicate area names: When an area is found multiple times in the file, you can find it here.
+
 Less than 3 coordinates: When an area has less than three coordinates it can't be drawn. Circles should not show up here.
+
 No activation: these areas are not triggered by NOTAMs, EAUP nor a schedule. This is not an issue if you plan on activating it only through the vaccHTTP.
+
+
 
 Please also make sure that your file only contains areas of your vACC. Upload the geojson file to github to check quickly!
 
