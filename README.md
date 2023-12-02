@@ -1,4 +1,4 @@
-# LARA-Configurator
+c# LARA-Configurator
 Creates vLARA configuration file for use on VATSIM.
 
 # Walkthrough
@@ -9,7 +9,8 @@ vacc - Name of vacc
 
 vaccHTTP - Link to the vACC's API for customised and manual activaitons
 
-Has_Categories - Bool - True: categories of fileDef are taken into account - False: Areas without categories are skipped
+Area_filter - object - RemoveTheseAreasName and RemoveTheseAreasCategories: List of string - these areas will be filtered out based on the area's name or category. This can be handy when you want to have an area defined in your TopskyArea.txt file but not in the vLARA configuration.
+
 
 
 ## Let's run
@@ -17,7 +18,7 @@ Been a while, ay?
 
 - Run Create_LARA-config
 - Run Helpful tools/lara-configTStoGEOjson
-- Run Helpful tools/lara-configtoVG
+(- Run Helpful tools/lara-configtoVG)
 
 ## vaccHTTP
 This is a variable that links to the vACC's API. 
@@ -36,4 +37,15 @@ For each area you can optionally add the following keys:
 - "remark" - Any information you wish to share. E.g.: EBCI SOPOK3K, MEDIL3Y unavailable - Sanicole Airshow - ...
 
 Keep in mind, that these will show every time your area activates! (Unless overwritten by vaccHTTP.)
+
+
+## Anomalies.json
+Schedule: A found schedule is not conform the TopskSky format. (This is likely an activation method that is not supported by LARA. Use the vaccHTTP function to activate this area.)
+Duplicate area names: When an area is found multiple times in the file, you can find it here.
+Less than 3 coordinates: When an area has less than three coordinates it can't be drawn. Circles should not show up here.
+No activation: these areas are not triggered by NOTAMs, EAUP nor a schedule. This is not an issue if you plan on activating it only through the vaccHTTP.
+
+Please also make sure that your file only contains areas of your vACC. Upload the geojson file to github to check quickly!
+
+
 
