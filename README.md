@@ -3,6 +3,10 @@ Creates vLARA configuration file for use on VATSIM.
 
 The collection of configuration files can be found [here](https://gitlab.com/portugal-vacc/vatlara-configurations).
 
+Other useful links
+  - [vLARA source code](https://gitlab.com/portugal-vacc/vatlara-api)
+  - [vLARA API](https://lara.vatsim.pt/api/docs) and [here](https://lara.vatsim.pt/)
+
 # Walkthrough
 ## Set variables
 fileDef - Path to the TopskyAreas.txt file + list of area categories. !Make sure the TopskyAreas.txt file only contains your vACC's areas when running the file! Invite your neighbors to the project if they haven't already.😎
