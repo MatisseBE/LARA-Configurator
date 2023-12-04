@@ -9,7 +9,7 @@ Other useful links
 
 # Walkthrough
 ## Set variables
-fileDef - Path to the TopskyAreas.txt file + list of area categories. !Make sure the TopskyAreas.txt file only contains your vACC's areas when running the file! Invite your neighbors to the project if they haven't already.😎
+fileDef - Path to the TopskyAreas.txt file !Make sure the TopskyAreas.txt file only contains your vACC's areas when running the file! Invite your neighbors to the project if they haven't already.😎
 
 vacc - Name of vacc
 
