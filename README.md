@@ -1,5 +1,6 @@
 # LARA-Configurator
 Creates vLARA configuration file for use on VATSIM.
+The collection of configuration files can be found (here)[https://gitlab.com/portugal-vacc/vatlara-configurations].
 
 # Walkthrough
 ## Set variables
