@@ -5,7 +5,7 @@ The collection of configuration files can be found [here](https://gitlab.com/por
 
 Other useful links
   - [vLARA source code](https://gitlab.com/portugal-vacc/vatlara-api)
-  - [vLARA API](https://lara.vatsim.pt/api/docs) and [here](https://lara.vatsim.pt/)
+  - [vLARA API](https://lara.vatsim.pt/api/docs), [landing page](https://lara.vatsim.pt/) and [the maintainer's page]( https://lara.vatsim.pt/admin)
 
 # Walkthrough
 ## Set variables
