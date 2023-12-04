@@ -27,7 +27,7 @@ Been a while, ay?
 - (Run Helpful tools/lara-configtoVG)
 
 ## vaccHTTP
-This is a variable that links to the vACC's API. 
+This is a variable that links to your vACC's API. 
 It allows the vACC to activate areas in ways we couldn't imagine. 
 
 For example:
@@ -35,12 +35,13 @@ Activate area's based on active runways, meteorological conditions, the ab-/pres
 It also allows the vACC to manually activate areas and activate or set an area's limit based on the activity and limits of other areas. 
 
 You can customise this fully to your vACC's needs. 
-The accepted format is TopSky schedules. 
+The accepted format is TopSky schedules, check Example/vaccHTTP-contents. 
 
-## Extra attributes
+## Area-attributes.json
 For each area you can optionally add the following keys:
 - "entry_conditions" - These are the entry conditions for said area. E.g.: Radio Mandatory Zone - Area reserved to participating a/c - Prohibited to all a/c - ...
 - "remark" - Any information you wish to share. E.g.: EBCI SOPOK3K, MEDIL3Y unavailable - Sanicole Airshow - ...
+- ("owner" - To come at a later date.)
 
 Keep in mind, that these will show every time your area activates! (Unless overwritten by vaccHTTP.)
 
