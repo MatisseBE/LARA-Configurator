@@ -3,10 +3,6 @@ Creates vLARA configuration file for use on VATSIM.
 
 The collection of configuration files can be found [here](https://gitlab.com/portugal-vacc/vatlara-configurations).
 
-Other useful links
-  - [vLARA source code](https://gitlab.com/portugal-vacc/vatlara-api)
-  - [vLARA API](https://lara.vatsim.pt/api/docs), [landing page](https://lara.vatsim.pt/) and the [maintainer's page]( https://lara.vatsim.pt/admin)
-
 # Walkthrough
 ## Set variables
 fileDef - Path to the TopskyAreas.txt file !Make sure the TopskyAreas.txt file only contains your vACC's areas when running the file! Invite your neighbors to the project if they haven't already.😎
@@ -54,6 +50,9 @@ Duplicate area names: When an area is found multiple times in the file, you can 
 Less than 3 coordinates: When an area has less than three coordinates it can't be drawn. Circles should not show up here.
 
 No activation: these areas are not triggered by NOTAMs, EAUP nor a schedule. This is not an issue if you plan on activating it only through the vaccHTTP.
+## Other useful links
+  - [vLARA source code](https://gitlab.com/portugal-vacc/vatlara-api)
+  - [vLARA API](https://lara.vatsim.pt/api/docs), [landing page](https://lara.vatsim.pt/) and the [maintainer's page]( https://lara.vatsim.pt/admin)
 
 
 
