@@ -38,6 +38,8 @@ Been a while, ay?
 - Run Helpful tools/lara-configTStoGEOjson
 - (Run Helpful tools/lara-configtoVG)
 
+Kindly check Output/blocks.json and check if the first and last areas area as expected.
+
 ## Anomalies.json
 Schedule: A found schedule is not conform the TopskSky format. (This is likely an activation method that is not supported by LARA. Use the vaccHTTP function to activate this area.)
 
