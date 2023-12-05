@@ -12,16 +12,6 @@ vacc - Name of vacc
 vaccHTTP - Link to the vACC's API for customised and manual activaitons
 
 Area_filter - object - RemoveTheseAreasName and RemoveTheseAreasCategories: List of string - these areas will be filtered out based on the area's name or category. This can be handy when you want to have an area defined in your TopskyArea.txt file but not in the vLARA configuration.
-
-
-
-## Let's run
-Been a while, ay? 
-
-- Run Create_LARA-config
-- Run Helpful tools/lara-configTStoGEOjson
-- (Run Helpful tools/lara-configtoVG)
-
 ## vaccHTTP
 This is a variable that links to your vACC's API. 
 It allows the vACC to activate areas in ways we couldn't imagine. 
@@ -41,6 +31,12 @@ For each area you can optionally add the following keys:
 
 Keep in mind, that these will show every time your area activates! (Unless overwritten by vaccHTTP.)
 
+## Let's run
+Been a while, ay? 
+
+- Run Create_LARA-config
+- Run Helpful tools/lara-configTStoGEOjson
+- (Run Helpful tools/lara-configtoVG)
 
 ## Anomalies.json
 Schedule: A found schedule is not conform the TopskSky format. (This is likely an activation method that is not supported by LARA. Use the vaccHTTP function to activate this area.)
