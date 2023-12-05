@@ -56,5 +56,10 @@ No activation: these areas are not triggered by NOTAMs, EAUP nor a schedule. Thi
 
 Please also make sure that your file only contains areas of your vACC. Upload the geojson file to github to check quickly!
 
+## Problems
+If you encounter problems, please create an issue. 
+
+If the functions from basic_functions ("clean_up" and ...) are missing, make sure you have cloned the whole repository as these functions can be found in LARA-configurator/extra_functions/basic_functions.py
+
 
 
