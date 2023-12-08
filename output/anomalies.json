@@ -1,9 +1,7 @@
 {
     "Bad_Schedules": [],
     "Duplicates_AreaNames": [],
-    "<3_coordinates": [
-        "EBTRAN1"
-    ],
+    "<3_coordinates": [],
     "no_activation": [
         "EBBE_DEMO",
         "EBBL_CTR",

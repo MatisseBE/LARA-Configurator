@@ -1,0 +1,31 @@
+
+Name,date_start,date_end,cyclicity(every mon,tue,wed,thu,fri),start_hour,end_hour -- min and max alt, remark, entry_conditon per area definition
+==> EBR03:0102:1224:12345:0001:2359:
+
+Name,date_start,date_end,cyclicity(every mon,tue,wed,thu,fri,sat),start_hour,end_hour,min_alt, max_alt -- remark, entry_conditon per area definition
+==>EBGB_ATZ:0103:0320:123456:0800:1540:0:1500
+
+
+Name,date_start,date_end,cyclicity(every mon,tue,wed,thu,fri,sat),start_hour,end_hour,min_alt, max_alt, remark
+==> TMA_4:1204:1204:1:1230:1245:9500:19500:Sanicole Airshow:EBCI SOPOK3K, MEDIL3Y unavailable
+
+
+From the Topsky documentation:
+- SchedStartDate First day to activate the area
+    • month and day in the format MMDD (for recurring periods every year)
+    • year, month and day in the format YYMMDD (for a single period)
+- SchedEndDate Last day to activate the area, formats as above
+- SchedWeekdays Days of the week to activate the area
+    • list of numbers representing the days to activate the area, for example 
+        “145” means the area will activate on Mondays, Thursdays and Fridays
+    • “0” (zero) to activate the area continuously from StartTime on 
+        SchedStartDate to EndTime on SchedEndDate
+- StartTime Time to activate the area (UTC time in the format HHMM)
+- EndTime Time to deactivate the area (UTC time in the format HHMM)
+- Lower Lower limit for the area (feet, 0-999999)
+- Upper Upper limit for the area (feet, 0-999999)
+
+User text is replaced by remarks and another entry can be made for the entry_conditions. 
+If there are no remarks but there is an entry_condition, leave the space between the two : emtpy.
+
+

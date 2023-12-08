@@ -1,5 +1,7 @@
 import json
 
+#Removes comments and enters returns a list of possible areas (see Output/blocks.json)
+#Removes everything above the first area definition (e.g.: category definitions (not needed))
 def cleanup(file):
     textfile = ""
 
@@ -24,3 +26,17 @@ def cleanup(file):
     
     #Everything before the first words AREA: is not an area and can be safely ignored. 
     return areas[1:]
+
+#Warns the user if an area is actively filtered by the user (or has no coordinates/circle)
+def Reason_discard(area, area_filter):
+    msg = ""
+    if not "coordinates" in area:
+        msg = f"{area["name"]} has no coordinates"
+    elif area["name"] in area_filter["RemoveByName"]:
+        msg = f"{area["name"]} is in area_filter (name)"
+    elif area["category"] in area_filter["RemoveByCategory"]:
+        msg = f"{area["name"]} is in area_filter (category: '{area["category"]}')"
+    else:
+        msg = f"Issue with {area["name"]} could not be determined\n{area}"
+    
+    return f"WARN: {msg} -> area discarted"
